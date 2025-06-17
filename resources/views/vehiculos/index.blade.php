@@ -8,80 +8,23 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-        }
-        .glass-effect {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
-        }
-        .table-row-hover {
-            transition: all 0.2s ease-in-out;
-        }
-        .table-row-hover:hover {
-            background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-            transform: translateX(4px);
-        }
-        .nav-link {
-            position: relative;
-            overflow: hidden;
-        }
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.3s ease;
-        }
-        .nav-link:hover::before {
-            width: 100%;
-        }
-        .stat-counter {
-            animation: countUp 1.5s ease-out;
-        }
-        @keyframes countUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .btn-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: all 0.3s ease;
-        }
-        .btn-gradient:hover {
-            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-        .status-badge {
-            position: relative;
-            overflow: hidden;
-        }
-        .status-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-        .status-badge:hover::before {
-            left: 100%;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect { backdrop-filter: blur(10px); background: rgba(255,255,255,0.95);}
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);}
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);}
+        .table-row-hover { transition: all 0.2s ease-in-out;}
+        .table-row-hover:hover { background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%); transform: translateX(4px);}
+        .nav-link { position: relative; overflow: hidden;}
+        .nav-link::before { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.3s ease;}
+        .nav-link:hover::before { width: 100%;}
+        .stat-counter { animation: countUp 1.5s ease-out;}
+        @keyframes countUp { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);}}
+        .btn-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease;}
+        .btn-gradient:hover { background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);}
+        .status-badge { position: relative; overflow: hidden;}
+        .status-badge::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s;}
+        .status-badge:hover::before { left: 100%;}
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -100,7 +43,6 @@
                     <p class="text-sm text-gray-500">Control y administración de flota</p>
                 </div>
             </div>
-
             <!-- Navegación desktop -->
             <nav class="hidden lg:flex items-center space-x-8">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium px-3 py-2 transition-colors">
@@ -118,7 +60,6 @@
                 <a href="{{ route('reportes.index') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium px-3 py-2 transition-colors">
                     <i class="fas fa-chart-bar mr-2"></i>Reportes
                 </a>
-                
                 <!-- Perfil y logout -->
                 <div class="flex items-center space-x-4 ml-8 pl-8 border-l border-gray-200">
                     <div class="flex items-center space-x-3">
@@ -135,13 +76,11 @@
                     </form>
                 </div>
             </nav>
-
             <!-- Botón menú móvil -->
             <button id="menu-btn" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
                 <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
-
         <!-- Menú móvil -->
         <nav id="mobile-menu" class="lg:hidden mt-4 pb-4 border-t border-gray-200 hidden">
             <div class="pt-4 space-y-2">
@@ -210,7 +149,6 @@
                 </span>
             </div>
         </div>
-
         <!-- Vehículos con Conductor -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 card-hover">
             <div class="flex items-center justify-between mb-4">
@@ -232,7 +170,6 @@
                 </span>
             </div>
         </div>
-
         <!-- Vehículos sin Conductor -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 card-hover">
             <div class="flex items-center justify-between mb-4">
@@ -275,7 +212,6 @@
                 Lista Completa de Vehículos
             </h3>
         </div>
-
         <!-- Tabla responsive -->
         <div class="overflow-x-auto">
             <table class="w-full">
@@ -382,7 +318,6 @@
                                     <i class="fas fa-edit mr-2"></i>
                                     Editar
                                 </a>
-                                
                                 <form action="{{ route('vehiculos.destroy', $vehiculo) }}"
                                       method="POST"
                                       onsubmit="return confirm('¿Estás seguro de eliminar este vehículo?');"
@@ -450,8 +385,7 @@
     // Menú móvil
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    
-    menuBtn.addEventListener('click', () => {
+    menuBtn?.addEventListener('click', () => {
         mobileMenu.classList.toggle('hidden');
         const icon = menuBtn.querySelector('i');
         icon.classList.toggle('fa-bars');
@@ -464,7 +398,6 @@
             const target = parseInt(counter.textContent);
             const increment = target / 50;
             let current = 0;
-            
             const updateCounter = () => {
                 if (current < target) {
                     current += increment;
@@ -474,7 +407,6 @@
                     counter.textContent = target;
                 }
             };
-            
             updateCounter();
         });
     };
@@ -501,21 +433,6 @@
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(animateCounters, 500);
     });
-
-    // Smooth scroll para navegación
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
 </script>
-
 </body>
 </html>

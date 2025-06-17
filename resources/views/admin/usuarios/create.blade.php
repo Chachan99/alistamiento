@@ -545,3 +545,120 @@
     </div>
 </footer>
 
+<!-- Scripts para interacción -->
+<script>
+    // Menú móvil
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn?.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        const icon = menuBtn.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+
+    // Mostrar/Ocultar contraseña
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordIcon = document.getElementById('password-icon');
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        });
+    }
+
+    // Vista previa de usuario
+    function updatePreview() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const role = document.getElementById('role').value;
+
+        document.getElementById('preview-name').textContent = name || 'Nombre del Usuario';
+        document.getElementById('preview-email').textContent = email || 'correo@ejemplo.com';
+        document.getElementById('preview-initial').textContent = name ? name.charAt(0).toUpperCase() : '?';
+        document.getElementById('role-text').textContent = role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Sin rol';
+
+        const rolePreview = document.getElementById('preview-role');
+        if (role) {
+            rolePreview.classList.add('show');
+        } else {
+            rolePreview.classList.remove('show');
+        }
+    }
+    document.getElementById('name').addEventListener('input', updatePreview);
+    document.getElementById('email').addEventListener('input', updatePreview);
+    document.getElementById('role').addEventListener('change', updatePreview);
+
+    // Fuerza de contraseña
+    const passwordStrength = document.getElementById('password-strength');
+    const passwordHelp = document.getElementById('password-help');
+    const lengthCheck = document.getElementById('length-check');
+    const uppercaseCheck = document.getElementById('uppercase-check');
+    const lowercaseCheck = document.getElementById('lowercase-check');
+    const numberCheck = document.getElementById('number-check');
+    passwordInput?.addEventListener('input', function() {
+        const val = passwordInput.value;
+        let strength = 0;
+        if (val.length >= 8) strength++;
+        if (/[A-Z]/.test(val)) strength++;
+        if (/[a-z]/.test(val)) strength++;
+        if (/\d/.test(val)) strength++;
+
+        // Indicador visual
+        passwordStrength.className = 'password-strength';
+        if (strength === 0) {
+            passwordStrength.style.width = '0%';
+        } else if (strength === 1) {
+            passwordStrength.classList.add('strength-weak');
+        } else if (strength === 2 || strength === 3) {
+            passwordStrength.classList.add('strength-medium');
+        } else if (strength === 4) {
+            passwordStrength.classList.add('strength-strong');
+        }
+
+        // Checks visuales
+        lengthCheck.classList.toggle('text-green-500', val.length >= 8);
+        lengthCheck.classList.toggle('text-gray-300', val.length < 8);
+        uppercaseCheck.classList.toggle('text-green-500', /[A-Z]/.test(val));
+        uppercaseCheck.classList.toggle('text-gray-300', !/[A-Z]/.test(val));
+        lowercaseCheck.classList.toggle('text-green-500', /[a-z]/.test(val));
+        lowercaseCheck.classList.toggle('text-gray-300', !/[a-z]/.test(val));
+        numberCheck.classList.toggle('text-green-500', /\d/.test(val));
+        numberCheck.classList.toggle('text-gray-300', !/\d/.test(val));
+    });
+
+    // Confirmación de contraseña
+    const passwordConfirm = document.getElementById('password_confirmation');
+    const passwordConfirmCheck = document.getElementById('password-confirm-check');
+    const passwordConfirmError = document.getElementById('password-confirm-error');
+    function checkPasswordMatch() {
+        if (!passwordConfirm.value) {
+            passwordConfirmCheck.classList.add('hidden');
+            passwordConfirmError.classList.add('hidden');
+            return;
+        }
+        if (passwordInput.value && passwordInput.value === passwordConfirm.value) {
+            passwordConfirmCheck.classList.remove('hidden');
+            passwordConfirmError.classList.add('hidden');
+        } else {
+            passwordConfirmCheck.classList.add('hidden');
+            passwordConfirmError.classList.remove('hidden');
+        }
+    }
+    passwordInput?.addEventListener('input', checkPasswordMatch);
+    passwordConfirm?.addEventListener('input', checkPasswordMatch);
+
+    // Inicializar preview al cargar
+    updatePreview();
+</script>
+</body>
+</html>
+

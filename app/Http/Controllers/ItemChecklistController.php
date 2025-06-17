@@ -29,26 +29,26 @@ class ItemChecklistController extends Controller
         return redirect()->route('checklist.index')->with('success', 'Ítem creado.');
     }
 
-    public function edit(ItemChecklist $itemChecklist)
-    {
-        return view('checklist.edit', compact('itemChecklist'));
-    }
+   public function edit(ItemChecklist $checklist)
+{
+    return view('checklist.edit', compact('checklist'));
+}
 
-    public function update(Request $request, ItemChecklist $itemChecklist)
-    {
-        $request->validate([
-            'nombre' => 'required|unique:item_checklists,nombre,' . $itemChecklist->id,
-        ]);
+public function update(Request $request, ItemChecklist $checklist)
+{
+    $request->validate([
+        'nombre' => 'required|unique:item_checklists,nombre,' . $checklist->id,
+    ]);
 
-        $itemChecklist->update($request->all());
+    $checklist->update($request->all());
 
-        return redirect()->route('checklist.index')->with('success', 'Ítem actualizado.');
-    }
+    return redirect()->route('checklist.index')->with('success', 'Ítem actualizado.');
+}
 
-    public function destroy(ItemChecklist $itemChecklist)
-    {
-        $itemChecklist->delete();
+public function destroy(ItemChecklist $checklist)
+{
+    $checklist->delete();
 
-        return redirect()->route('checklist.index')->with('success', 'Ítem eliminado.');
-    }
+    return redirect()->route('checklist.index')->with('success', 'Ítem eliminado.');
+}
 }

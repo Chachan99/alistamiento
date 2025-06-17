@@ -542,3 +542,52 @@
                 tbody.appendChild(noResultsRow);
             }
         } else {
+            const noResultsRow = document.getElementById('noResultsRow');
+            if (noResultsRow) {
+                noResultsRow.remove();
+            }
+        }
+    }
+
+    // Modal de detalles de usuario
+    function viewUserDetails(id, name, email, role) {
+        const modal = document.getElementById('userModal');
+        const modalContent = document.getElementById('modalContent');
+        modalContent.innerHTML = `
+            <div class="flex items-center mb-4">
+                <div class="h-12 w-12 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg mr-4">
+                    <span class="text-white font-bold text-xl">${name.charAt(0).toUpperCase()}</span>
+                </div>
+                <div>
+                    <div class="text-lg font-semibold text-gray-900">${name}</div>
+                    <div class="text-sm text-gray-500">${email}</div>
+                    <div class="mt-2">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200">
+                            <i class="fas fa-shield-alt mr-1"></i>
+                            ${role}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-sm text-gray-600 mb-2"><i class="fas fa-id-badge mr-1"></i>ID: #${id}</div>
+            <div class="text-sm text-gray-600"><i class="fas fa-clock mr-1"></i>Estado: Activo</div>
+        `;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('userModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // Confirmación de eliminación
+    function confirmDelete(btn) {
+        if (confirm('¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.')) {
+            btn.closest('form').submit();
+        }
+    }
+</script>
+</body>
+</html>

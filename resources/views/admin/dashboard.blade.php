@@ -339,7 +339,7 @@
     <div class="max-w-7xl mx-auto px-6 py-8">
         <div class="flex flex-col md:flex-row items-center justify-between">
             <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                <div class="gradient-bg p-2 rounded-lg">
+                <div class="gradient-bg p-2 rounded-lg flex items-center justify-center">
                     <i class="fas fa-truck text-white"></i>
                 </div>
                 <div>
