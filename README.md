@@ -44,6 +44,12 @@ We would like to extend our thanks to the following sponsors for funding Laravel
 - **[Redberry](https://redberry.international/laravel-development)**
 - **[Active Logic](https://activelogic.com)**
 
+## Admin Layout
+
+The updated admin views use a reusable layout located at
+`resources/views/layouts/admin.blade.php`. Ensure this file exists so
+templates that extend `layouts.admin` render correctly.
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).

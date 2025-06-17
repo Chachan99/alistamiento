@@ -1,8 +1,11 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold text-blue-900">Asignar Conductores a Vehículos</h2>
-    </x-slot>
+@extends('layouts.admin')
 
+@section('title', 'Asignar Conductores | Transporte S.A.')
+@section('header_icon', 'fas fa-truck')
+@section('header_title', 'Asignar Conductores')
+@section('header_subtitle', 'Vehículos disponibles')
+
+@section('content')
     <div class="p-6 bg-white shadow rounded">
         @if(session('success'))
             <div class="mb-4 bg-green-100 text-green-800 p-3 rounded">
@@ -47,4 +50,4 @@
             </table>
         @endif
     </div>
-</x-app-layout>
+@endsection
