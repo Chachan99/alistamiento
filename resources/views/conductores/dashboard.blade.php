@@ -1,62 +1,11 @@
-<html lang="es" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard - Conductor</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f3f4f6;
-    }
-  </style>
-</head>
-<body class="min-h-screen flex flex-col bg-gray-100">
-  <header class="bg-white shadow sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-      <h1 class="text-3xl font-extrabold text-indigo-900">
-        Dashboard - Conductor
-      </h1>
-      <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button
-          type="submit"
-          class="text-red-600 font-semibold hover:text-red-800 transition flex items-center gap-1"
-          aria-label="Cerrar sesión"
-        >
-          <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-        </button>
-      </form>
-    </div>
-  </header>
+@extends('layouts.admin')
 
-  @if(session('error'))
-    <div class="max-w-7xl mx-auto px-6 mt-6">
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong class="font-bold">Error:</strong>
-        <span class="block sm:inline">{{ session('error') }}</span>
-      </div>
-    </div>
-  @endif
+@section('title', 'Dashboard Conductor')
+@section('header_icon', 'fas fa-id-badge')
+@section('header_title', 'Panel del Conductor')
+@section('header_subtitle', 'Información de rutas')
 
-  @if(session('success'))
-    <div class="max-w-7xl mx-auto px-6 mt-6">
-      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-        <strong class="font-bold">¡Éxito!</strong>
-        <span class="block sm:inline">{{ session('success') }}</span>
-      </div>
-    </div>
-  @endif
-
-  <main class="flex-grow py-12">
+@section('content')
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -114,12 +63,4 @@
       </div>
 
     </div>
-  </main>
-
-  <footer class="bg-white border-t border-gray-200 py-6 mt-12">
-    <div class="max-w-7xl mx-auto px-6 text-center text-gray-600 text-sm select-none">
-      © 2024 Transporte S.A. Todos los derechos reservados.
-    </div>
-  </footer>
-</body>
-</html>
+@endsection

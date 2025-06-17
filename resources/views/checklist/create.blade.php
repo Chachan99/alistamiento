@@ -1,8 +1,11 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold text-blue-900">Nuevo Ítem</h2>
-    </x-slot>
+@extends('layouts.admin')
 
+@section('title', 'Nuevo Ítem | Transporte S.A.')
+@section('header_icon', 'fas fa-clipboard-check')
+@section('header_title', 'Checklist')
+@section('header_subtitle', 'Nuevo Ítem')
+
+@section('content')
     <div class="p-6 bg-white shadow rounded">
         <form action="{{ route('checklist.store') }}" method="POST">
             @csrf
@@ -11,4 +14,4 @@
             <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Guardar</button>
         </form>
     </div>
-</x-app-layout>
+@endsection
