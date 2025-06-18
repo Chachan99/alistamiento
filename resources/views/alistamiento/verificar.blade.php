@@ -36,6 +36,14 @@
     .nav-link:hover::before {
       width: 100%;
     }
+    .card-animate { transition: box-shadow 0.2s, transform 0.2s; }
+    .card-animate:hover { box-shadow: 0 10px 32px 0 rgba(99,102,241,0.10); transform: translateY(-4px) scale(1.01); }
+    .table-row-animate { transition: background 0.2s, transform 0.2s; }
+    .table-row-animate:hover { background: linear-gradient(90deg, #eef2ff 0%, #f3e8ff 100%); transform: scale(1.01); }
+    .badge { display: inline-block; padding: 0.25em 0.75em; border-radius: 9999px; font-size: 0.85em; font-weight: 600; }
+    .badge-pendiente { background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%); color: #b45309; }
+    .btn-modern { background: linear-gradient(90deg, #6366f1 0%, #a21caf 100%); color: #fff; font-weight: 600; border-radius: 0.75rem; padding: 0.5rem 1.5rem; transition: background 0.2s, transform 0.2s; box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10); }
+    .btn-modern:hover { background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); transform: translateY(-2px) scale(1.03); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50">
@@ -91,10 +99,10 @@
   </header>
 
   <main class="flex-grow max-w-7xl mx-auto px-6 py-10 w-full">
-    <div class="bg-white shadow-lg rounded-lg p-8">
+    <div class="bg-gradient-to-br from-indigo-50 to-purple-50 shadow-xl rounded-2xl p-8 card-animate">
       @if(session('success'))
-        <div class="mb-6 rounded border-l-4 border-green-500 bg-green-100 p-4 text-green-700 font-medium" role="alert">
-          {{ session('success') }}
+        <div class="mb-6 rounded border-l-4 border-green-500 bg-green-100 p-4 text-green-700 font-medium flex items-center gap-2" role="alert">
+          <i class="fas fa-check-circle"></i> {{ session('success') }}
         </div>
       @endif
 
@@ -113,17 +121,20 @@
             </thead>
             <tbody>
               @foreach($alistamientos as $alistamiento)
-                <tr class="border-t hover:bg-indigo-50 transition">
-                  <td class="py-3 px-4 font-medium text-gray-900">{{ $alistamiento->conductor->name }}</td>
+                <tr class="border-t table-row-animate">
+                  <td class="py-3 px-4 font-medium text-gray-900 flex items-center gap-2">
+                    <span class="badge badge-pendiente">Pendiente</span>
+                    <span>{{ $alistamiento->conductor->name }}</span>
+                  </td>
                   <td class="py-3 px-4">{{ $alistamiento->vehiculo->placa }}</td>
                   <td class="py-3 px-4">{{ $alistamiento->created_at->format('Y-m-d H:i') }}</td>
                   <td class="py-3 px-4">
                     <a
                       href="{{ route('alistamientos.detalle', $alistamiento->id) }}"
-                      class="text-indigo-600 hover:underline font-semibold"
+                      class="btn-modern inline-flex items-center gap-2"
                       aria-label="Ver detalle del alistamiento de {{ $alistamiento->conductor->name }} para vehículo {{ $alistamiento->vehiculo->placa }}"
                     >
-                      Ver Detalle
+                      <i class="fas fa-eye"></i> Ver Detalle
                     </a>
                   </td>
                 </tr>

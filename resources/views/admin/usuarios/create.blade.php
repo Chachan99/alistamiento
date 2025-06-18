@@ -271,7 +271,7 @@
                 </div>
 
                 <!-- Formulario -->
-                <form method="POST" action="{{ route('admin.usuarios.store') }}" class="p-6 space-y-6" novalidate>
+                <form method="POST" action="{{ route('admin.usuarios.store') }}" class="p-6 space-y-6" novalidate enctype="multipart/form-data">
                     @csrf
 
                     <!-- Campo Nombre -->
@@ -412,6 +412,72 @@
                                 <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
                             </p>
                         @enderror
+                    </div>
+
+                    <!-- Campos adicionales para conductores -->
+                    <div id="conductor-fields" class="space-y-4 hidden">
+                        <!-- Fecha de expedición de la licencia -->
+                        <div class="form-group">
+                            <label for="fecha_expedicion_licencia" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+                                <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>Fecha de Expedición de la Licencia
+                            </label>
+                            <input type="date" id="fecha_expedicion_licencia" name="fecha_expedicion_licencia" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 focus:bg-white" value="{{ old('fecha_expedicion_licencia') }}" />
+                            @error('fecha_expedicion_licencia')
+                                <p class="text-red-600 mt-2 text-sm flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <!-- Fecha de vencimiento de la licencia -->
+                        <div class="form-group">
+                            <label for="fecha_vencimiento_licencia" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+                                <i class="fas fa-calendar-check mr-2 text-gray-400"></i>Fecha de Vencimiento de la Licencia
+                            </label>
+                            <input type="date" id="fecha_vencimiento_licencia" name="fecha_vencimiento_licencia" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 focus:bg-white" value="{{ old('fecha_vencimiento_licencia') }}" />
+                            @error('fecha_vencimiento_licencia')
+                                <p class="text-red-600 mt-2 text-sm flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <!-- PDF de la licencia -->
+                        <div class="form-group">
+                            <label for="pdf_licencia" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+                                <i class="fas fa-file-pdf mr-2 text-gray-400"></i>PDF de la Licencia de Conducción
+                            </label>
+                            <input type="file" id="pdf_licencia" name="pdf_licencia" accept="application/pdf" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 focus:bg-white" />
+                            <span class="text-xs text-gray-500">Solo PDF</span>
+                            @error('pdf_licencia')
+                                <p class="text-red-600 mt-2 text-sm flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <!-- Número de cédula -->
+                        <div class="form-group">
+                            <label for="numero_cedula" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+                                <i class="fas fa-id-card mr-2 text-gray-400"></i>Número de Cédula
+                            </label>
+                            <input type="text" id="numero_cedula" name="numero_cedula" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 focus:bg-white" value="{{ old('numero_cedula') }}" />
+                            @error('numero_cedula')
+                                <p class="text-red-600 mt-2 text-sm flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <!-- PDF de la cédula -->
+                        <div class="form-group">
+                            <label for="pdf_cedula" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+                                <i class="fas fa-file-pdf mr-2 text-gray-400"></i>PDF de la Cédula
+                            </label>
+                            <input type="file" id="pdf_cedula" name="pdf_cedula" accept="application/pdf" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 focus:bg-white" />
+                            <span class="text-xs text-gray-500">Solo PDF</span>
+                            @error('pdf_cedula')
+                                <p class="text-red-600 mt-2 text-sm flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
                     </div>
 
                     <!-- Botones de acción -->
@@ -596,6 +662,34 @@
     document.getElementById('name').addEventListener('input', updatePreview);
     document.getElementById('email').addEventListener('input', updatePreview);
     document.getElementById('role').addEventListener('change', updatePreview);
+
+    // Mostrar campos de conductor si el rol es conductor
+    function toggleConductorFields() {
+        const role = document.getElementById('role').value;
+        const conductorFields = document.getElementById('conductor-fields');
+        if (role && role.toLowerCase() === 'conductor') {
+            conductorFields.classList.remove('hidden');
+        } else {
+            conductorFields.classList.add('hidden');
+        }
+    }
+    document.getElementById('role').addEventListener('change', toggleConductorFields);
+    // Inicializar visibilidad al cargar
+    toggleConductorFields();
+
+    // Validar que los archivos sean PDF
+    document.getElementById('pdf_licencia')?.addEventListener('change', function(e) {
+        if (this.files[0] && this.files[0].type !== 'application/pdf') {
+            alert('Solo se permite subir archivos PDF para la licencia.');
+            this.value = '';
+        }
+    });
+    document.getElementById('pdf_cedula')?.addEventListener('change', function(e) {
+        if (this.files[0] && this.files[0].type !== 'application/pdf') {
+            alert('Solo se permite subir archivos PDF para la cédula.');
+            this.value = '';
+        }
+    });
 
     // Fuerza de contraseña
     const passwordStrength = document.getElementById('password-strength');

@@ -17,7 +17,6 @@ class ConductorController extends Controller
     $alistamientosAprobados = Alistamiento::where('user_id', $userId)->where('estado', 'aprobado')->count();
     $alistamientosRechazados = Alistamiento::where('user_id', $userId)->where('estado', 'rechazado')->count();
 
-    // Obtener el último motivo de rechazo como texto plano
     $ultimoRechazo = Alistamiento::where('user_id', $userId)
         ->where('estado', 'rechazado')
         ->orderBy('updated_at', 'desc')
@@ -25,12 +24,20 @@ class ConductorController extends Controller
 
     $motivoRechazo = $ultimoRechazo ? $ultimoRechazo->observaciones : null;
 
+    // OBTENER TODOS LOS VEHÍCULOS ASIGNADOS (por si acaso)
+    $vehiculos = Vehiculo::where('user_id', $userId)->get();
+
+    // OBTENER SOLO EL PRIMER VEHÍCULO ASIGNADO (relación hasOne)
+    $vehiculo = auth()->user()->vehiculoAsignado;
+
     return view('conductores.dashboard', compact(
         'totalVehiculos',
         'alistamientosPendientes',
         'alistamientosAprobados',
         'alistamientosRechazados',
-        'motivoRechazo'
+        'motivoRechazo',
+        'vehiculos',
+        'vehiculo'
     ));
 }
 

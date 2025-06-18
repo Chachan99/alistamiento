@@ -9,7 +9,18 @@ class Alistamiento extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'vehiculo_id', 'checklist', 'observaciones', 'foto_danio', 'estado'];
+    protected $fillable = [
+        'user_id',
+        'vehiculo_id',
+        'checklist',
+        'observaciones',
+        'foto_danio',
+        'estado',
+        'soat_expedicion',
+        'soat_vencimiento',
+        'tecnico_expedicion',
+        'tecnico_vencimiento',
+    ];
 
     protected $casts = [
         'checklist' => 'array',

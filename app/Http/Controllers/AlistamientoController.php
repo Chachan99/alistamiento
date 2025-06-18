@@ -52,7 +52,11 @@ class AlistamientoController extends Controller
         $request->validate([
             'checklist' => 'required|array',
             'foto_danio' => 'nullable|image|max:2048',
-            'observaciones' => 'nullable|string'
+            'observaciones' => 'nullable|string',
+            'soat_expedicion' => 'required|date',
+            'soat_vencimiento' => 'required|date',
+            'tecnico_expedicion' => 'required|date',
+            'tecnico_vencimiento' => 'required|date',
         ]);
 
         $vehiculo = Vehiculo::where('user_id', $userId)->first();
@@ -72,6 +76,10 @@ class AlistamientoController extends Controller
             'checklist' => $request->input('checklist'),
             'foto_danio' => $foto,
             'observaciones' => $request->input('observaciones'),
+            'soat_expedicion' => $request->input('soat_expedicion'),
+            'soat_vencimiento' => $request->input('soat_vencimiento'),
+            'tecnico_expedicion' => $request->input('tecnico_expedicion'),
+            'tecnico_vencimiento' => $request->input('tecnico_vencimiento'),
             'estado' => 'pendiente'
         ]);
 
@@ -88,11 +96,16 @@ class AlistamientoController extends Controller
     }
 
     public function detalle($id)
-    {
-        $alistamiento = Alistamiento::with(['vehiculo', 'conductor'])->findOrFail($id);
+{
+    $alistamiento = Alistamiento::with(['vehiculo', 'conductor'])->findOrFail($id);
 
-        return view('alistamiento.detalle', compact('alistamiento'));
-    }
+    // Historial de alistamientos del mismo conductor
+    $alistamientos = Alistamiento::where('user_id', $alistamiento->user_id)
+                                 ->orderBy('created_at', 'desc')
+                                 ->get();
+
+    return view('alistamiento.detalle', compact('alistamiento', 'alistamientos'));
+}
 
     public function aprobar($id)
     {

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -92,70 +91,149 @@
   </header>
 
   <main class="flex-grow max-w-4xl mx-auto px-6 py-10 w-full">
-    <div class="bg-white shadow-lg rounded-xl p-8 space-y-6">
-      <div>
-        <strong class="text-indigo-800">Conductor:</strong> {{ $alistamiento->conductor->name }}
+
+    <!-- DATOS DEL CONDUCTOR (AHORA ARRIBA Y CON LOS DATOS DEL CONDUCTOR DEL ALISTAMIENTO) -->
+    <div class="max-w-3xl mx-auto mb-8">
+      <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg p-8 flex flex-col md:flex-row items-center gap-8">
+        <div>
+          <div class="w-32 h-32 rounded-full bg-white shadow flex items-center justify-center overflow-hidden mb-4">
+            <i class="fa-solid fa-user text-6xl text-blue-400"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-white mb-1">{{ $alistamiento->conductor->name }}</h2>
+          <p class="text-white/80 mb-2"><i class="fa-solid fa-envelope mr-2"></i>{{ $alistamiento->conductor->email }}</p>
+          <p class="text-white/80 mb-2"><i class="fa-solid fa-id-card mr-2"></i>Cédula: {{ $alistamiento->conductor->numero_cedula ?? 'No registrada' }}</p>
+        </div>
+        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-lg p-4 shadow">
+            <h3 class="font-semibold text-blue-600 mb-2">Licencia de Conducción</h3>
+            <p><b>Expedición:</b> {{ $alistamiento->conductor->fecha_expedicion_licencia ? \Carbon\Carbon::parse($alistamiento->conductor->fecha_expedicion_licencia)->format('d/m/Y') : 'No registrada' }}</p>
+            <p><b>Vencimiento:</b> {{ $alistamiento->conductor->fecha_vencimiento_licencia ? \Carbon\Carbon::parse($alistamiento->conductor->fecha_vencimiento_licencia)->format('d/m/Y') : 'No registrada' }}</p>
+            @if($alistamiento->conductor->pdf_licencia)
+              <a href="{{ asset('storage/' . $alistamiento->conductor->pdf_licencia) }}" target="_blank" class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition">
+                <i class="fa-solid fa-file-pdf mr-1"></i>Ver PDF Licencia
+              </a>
+            @else
+              <span class="inline-block mt-2 px-3 py-1 bg-gray-100 text-gray-500 rounded">Sin archivo</span>
+            @endif
+          </div>
+          <div class="bg-white rounded-lg p-4 shadow">
+            <h3 class="font-semibold text-blue-600 mb-2">Cédula</h3>
+            <p><b>Número:</b> {{ $alistamiento->conductor->numero_cedula ?? 'No registrada' }}</p>
+            @if($alistamiento->conductor->pdf_cedula)
+              <a href="{{ asset('storage/' . $alistamiento->conductor->pdf_cedula) }}" target="_blank" class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition">
+                <i class="fa-solid fa-file-pdf mr-1"></i>Ver PDF Cédula
+              </a>
+            @else
+              <span class="inline-block mt-2 px-3 py-1 bg-gray-100 text-gray-500 rounded">Sin archivo</span>
+            @endif
+          </div>
+        </div>
       </div>
-      <div>
-        <strong class="text-indigo-800">Vehículo:</strong> {{ $alistamiento->vehiculo->placa }}
-      </div>
-      <div>
-        <strong class="text-indigo-800">Fecha:</strong> {{ $alistamiento->created_at->format('Y-m-d H:i') }}
+    </div>
+
+    <div class="bg-white shadow-lg rounded-xl p-8 space-y-8 fade-in">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <span class="text-indigo-800 font-bold"><i class="fas fa-user mr-1"></i>Conductor:</span>
+          <span class="text-gray-800">{{ $alistamiento->conductor->name }}</span>
+        </div>
+        <div>
+          <span class="text-indigo-800 font-bold"><i class="fas fa-car mr-1"></i>Vehículo:</span>
+          <span class="text-gray-800">{{ $alistamiento->vehiculo->placa }}</span>
+        </div>
+        <div>
+          <span class="text-indigo-800 font-bold"><i class="fas fa-calendar-alt mr-1"></i>Fecha:</span>
+          <span class="text-gray-800">{{ $alistamiento->created_at->format('d/m/Y H:i') }}</span>
+        </div>
       </div>
 
-      <div>
-        <h3 class="text-indigo-700 font-semibold mb-2">Checklist</h3>
-        <ul class="list-disc ml-6 space-y-1">
-          @foreach($alistamiento->checklist as $item => $respuesta)
-            <li><strong>{{ ucfirst($item) }}:</strong> {{ ucfirst($respuesta) }}</li>
-          @endforeach
-        </ul>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-indigo-700 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-list-check"></i> Checklist</h3>
+          <ul class="list-disc ml-6 space-y-1">
+            @foreach($alistamiento->checklist as $item => $respuesta)
+              <li><strong>{{ ucfirst($item) }}:</strong> {{ ucfirst($respuesta) }}</li>
+            @endforeach
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-indigo-700 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-comment-dots"></i> Observaciones</h3>
+          <p class="text-gray-700">{{ $alistamiento->observaciones ?? 'Ninguna' }}</p>
+        </div>
       </div>
 
-      <div>
-        <h3 class="text-indigo-700 font-semibold mb-2">Observaciones del Conductor</h3>
-        <p class="text-gray-700">{{ $alistamiento->observaciones ?? 'Ninguna' }}</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-indigo-700 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-file-image"></i> Foto cargada por el conductor</h3>
+          @if($alistamiento->foto_danio)
+            <img src="{{ asset('storage/' . $alistamiento->foto_danio) }}" alt="Foto del daño en el vehículo {{ $alistamiento->vehiculo->placa }}" class="w-full max-w-xs rounded shadow object-cover border border-gray-200" loading="lazy" />
+            <a href="{{ asset('storage/' . $alistamiento->foto_danio) }}" target="_blank" class="block mt-2 text-blue-600 hover:underline text-sm"><i class="fas fa-external-link-alt"></i> Ver imagen completa</a>
+          @else
+            <span class="text-gray-500">No se cargó foto</span>
+          @endif
+        </div>
+        <div>
+          <h3 class="text-indigo-700 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-history"></i> Historial de acciones</h3>
+          <ul class="list-disc ml-6 space-y-1 text-gray-700">
+            <li><strong>Estado actual:</strong> <span class="font-bold {{ $alistamiento->estado == 'aprobado' ? 'text-green-600' : ($alistamiento->estado == 'rechazado' ? 'text-red-600' : 'text-yellow-600') }}">{{ ucfirst($alistamiento->estado) }}</span></li>
+            <li><strong>Creado:</strong> {{ $alistamiento->created_at->format('d/m/Y H:i') }}</li>
+            @if($alistamiento->updated_at && $alistamiento->updated_at != $alistamiento->created_at)
+              <li><strong>Última actualización:</strong> {{ $alistamiento->updated_at->format('d/m/Y H:i') }}</li>
+            @endif
+            @if($alistamiento->estado == 'rechazado' && $alistamiento->observaciones)
+              <li><strong>Motivo de rechazo:</strong> <span class="text-red-700">{{ $alistamiento->observaciones }}</span></li>
+            @endif
+          </ul>
+        </div>
       </div>
 
-      @if($alistamiento->foto_danio)
-      <div>
-        <h3 class="text-indigo-700 font-semibold mb-2">Foto del Daño</h3>
-        <img
-          src="{{ asset('storage/' . $alistamiento->foto_danio) }}"
-          alt="Foto del daño en el vehículo {{ $alistamiento->vehiculo->placa }}"
-          class="w-64 rounded shadow object-cover"
-          loading="lazy"
-        />
-      </div>
-      @endif
-
-      <div class="flex flex-col md:flex-row gap-6 mt-6">
+      <div class="flex flex-col md:flex-row gap-6 mt-8">
         <form method="POST" action="{{ route('alistamientos.aprobar', $alistamiento->id) }}" class="flex-1">
           @csrf
-          <button
-            type="submit"
-            class="w-full bg-green-600 hover:bg-green-800 text-white px-4 py-3 rounded font-semibold shadow transition"
-          >
-            Aprobar
-          </button>
+          <button type="submit" class="w-full bg-green-600 hover:bg-green-800 text-white px-4 py-3 rounded font-semibold shadow transition"><i class="fas fa-check mr-2"></i> Aprobar</button>
         </form>
-
         <form method="POST" action="{{ route('alistamientos.rechazar', $alistamiento->id) }}" class="flex-1 flex flex-col gap-2">
           @csrf
-          <textarea
-            name="observaciones"
-            required
-            placeholder="Motivo del rechazo..."
-            class="border border-gray-300 rounded px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-red-500"
-            rows="3"
-          ></textarea>
-          <button
-            type="submit"
-            class="w-full bg-red-600 hover:bg-red-800 text-white px-4 py-3 rounded font-semibold shadow transition"
-          >
-            Rechazar
-          </button>
+          <textarea name="observaciones" required placeholder="Motivo del rechazo..." class="border border-gray-300 rounded px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-red-500" rows="3"></textarea>
+          <button type="submit" class="w-full bg-red-600 hover:bg-red-800 text-white px-4 py-3 rounded font-semibold shadow transition"><i class="fas fa-times mr-2"></i> Rechazar</button>
         </form>
+      </div>
+    </div>
+
+    <!-- Historial de Alistamientos -->
+    <div class="max-w-4xl mx-auto mt-10">
+      <h3 class="text-xl font-bold mb-4 text-gray-700">Historial de Alistamientos</h3>
+      <div class="bg-white rounded-xl shadow p-6">
+        @if($alistamientos->count())
+          <table class="w-full text-left">
+            <thead>
+              <tr>
+                <th class="py-2 px-3">Fecha</th>
+                <th class="py-2 px-3">Vehículo</th>
+                <th class="py-2 px-3">Estado</th>
+                <th class="py-2 px-3">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($alistamientos as $alistamiento)
+                <tr class="border-t hover:bg-blue-50 transition">
+                  <td class="py-2 px-3">{{ \Carbon\Carbon::parse($alistamiento->created_at)->format('d/m/Y H:i') }}</td>
+                  <td class="py-2 px-3">{{ $alistamiento->vehiculo->placa ?? 'N/A' }}</td>
+                  <td class="py-2 px-3">
+                    <span class="px-2 py-1 rounded text-xs {{ $alistamiento->estado == 'Aprobado' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
+                      {{ $alistamiento->estado }}
+                    </span>
+                  </td>
+                  <td class="py-2 px-3">
+                    <a href="{{ route('alistamientos.detalle', $alistamiento) }}" class="text-blue-600 hover:underline">Ver detalles</a>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        @else
+          <p class="text-gray-500">No hay alistamientos registrados.</p>
+        @endif
       </div>
     </div>
   </main>

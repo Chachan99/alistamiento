@@ -29,14 +29,27 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
             'role' => 'required|exists:roles,name',
+            'numero_cedula' => 'nullable|string|max:50',
+            'fecha_expedicion_licencia' => 'nullable|date',
+            'fecha_vencimiento_licencia' => 'nullable|date',
+            'pdf_licencia' => 'nullable|file|mimes:pdf',
+            'pdf_cedula' => 'nullable|file|mimes:pdf',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
+        $data = $request->only([
+            'name', 'email', 'numero_cedula', 'fecha_expedicion_licencia', 'fecha_vencimiento_licencia'
         ]);
+        $data['password'] = bcrypt($request->password);
 
+        // Guardar archivos si existen
+        if ($request->hasFile('pdf_licencia')) {
+            $data['pdf_licencia'] = $request->file('pdf_licencia')->store('licencias', 'public');
+        }
+        if ($request->hasFile('pdf_cedula')) {
+            $data['pdf_cedula'] = $request->file('pdf_cedula')->store('cedulas', 'public');
+        }
+
+        $user = User::create($data);
         $user->assignRole($request->role);
 
         return redirect()->route('admin.usuarios.index')->with('success', 'Usuario creado correctamente.');
@@ -54,10 +67,26 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $usuario->id,
             'role' => 'required|exists:roles,name',
+            'numero_cedula' => 'nullable|string|max:50',
+            'fecha_expedicion_licencia' => 'nullable|date',
+            'fecha_vencimiento_licencia' => 'nullable|date',
+            'pdf_licencia' => 'nullable|file|mimes:pdf',
+            'pdf_cedula' => 'nullable|file|mimes:pdf',
         ]);
 
-        $usuario->update($request->only('name', 'email'));
+        $data = $request->only([
+            'name', 'email', 'numero_cedula', 'fecha_expedicion_licencia', 'fecha_vencimiento_licencia'
+        ]);
 
+        // Guardar archivos si existen
+        if ($request->hasFile('pdf_licencia')) {
+            $data['pdf_licencia'] = $request->file('pdf_licencia')->store('licencias', 'public');
+        }
+        if ($request->hasFile('pdf_cedula')) {
+            $data['pdf_cedula'] = $request->file('pdf_cedula')->store('cedulas', 'public');
+        }
+
+        $usuario->update($data);
         $usuario->syncRoles([$request->role]);
 
         return redirect()->route('admin.usuarios.index')->with('success', 'Usuario actualizado.');

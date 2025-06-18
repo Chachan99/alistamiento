@@ -19,10 +19,9 @@ class User extends Authenticatable
     return $this->hasMany(Alistamiento::class);
 }
 
-
-    public function vehiculoAsignado()
+public function vehiculoAsignado()
 {
-    return $this->hasOne(Vehiculo::class);
+    return $this->hasOne(\App\Models\Vehiculo::class, 'user_id'); // Ajusta 'user_id' si tu llave foránea es diferente
 }
 
     use HasApiTokens;
@@ -43,6 +42,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'numero_cedula',
+        'pdf_cedula',
+        'pdf_licencia',
+        'fecha_expedicion_licencia',
+        'fecha_vencimiento_licencia',
     ];
 
     /**

@@ -86,8 +86,60 @@
         </div>
       @endif
 
+      <!-- Información del conductor -->
+      <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl shadow p-6 mb-10 flex flex-col md:flex-row items-center gap-8">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center shadow-lg">
+            <i class="fas fa-user-tie text-white text-3xl"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-indigo-900 mb-1">Conductor: {{ auth()->user()->name }}</h2>
+            <p class="text-gray-700 text-base mb-1"><i class="fas fa-envelope text-indigo-400 mr-1"></i> {{ auth()->user()->email }}</p>
+            <p class="text-gray-700 text-base mb-1"><i class="fas fa-id-card text-indigo-400 mr-1"></i> Cédula: {{ auth()->user()->numero_cedula ?? 'No registrada' }}</p>
+            <p class="text-gray-700 text-base mb-1"><i class="fas fa-calendar-alt text-indigo-400 mr-1"></i> Expedición Licencia: {{ auth()->user()->fecha_expedicion_licencia ? \Carbon\Carbon::parse(auth()->user()->fecha_expedicion_licencia)->format('d/m/Y') : 'No registrada' }}</p>
+            <p class="text-gray-700 text-base mb-1"><i class="fas fa-calendar-check text-indigo-400 mr-1"></i> Vencimiento Licencia: {{ auth()->user()->fecha_vencimiento_licencia ? \Carbon\Carbon::parse(auth()->user()->fecha_vencimiento_licencia)->format('d/m/Y') : 'No registrada' }}</p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-3 w-full md:w-auto">
+          <div>
+            <span class="text-gray-600 font-semibold flex items-center gap-2"><i class="fas fa-file-pdf text-indigo-400"></i> PDF Cédula:</span>
+            @if(auth()->user()->pdf_cedula)
+              <a href="{{ asset('storage/' . auth()->user()->pdf_cedula) }}" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1"><i class="fas fa-external-link-alt"></i> Ver archivo</a>
+            @else
+              <span class="text-gray-500">No cargado</span>
+            @endif
+          </div>
+          <div>
+            <span class="text-gray-600 font-semibold flex items-center gap-2"><i class="fas fa-file-pdf text-indigo-400"></i> PDF Licencia:</span>
+            @if(auth()->user()->pdf_licencia)
+              <a href="{{ asset('storage/' . auth()->user()->pdf_licencia) }}" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1"><i class="fas fa-external-link-alt"></i> Ver archivo</a>
+            @else
+              <span class="text-gray-500">No cargado</span>
+            @endif
+          </div>
+        </div>
+      </div>
+
       <form action="{{ route('alistamiento.store') }}" method="POST" enctype="multipart/form-data" novalidate>
         @csrf
+
+        <!-- Fechas SOAT y Técnico Mecánica -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-5 shadow flex flex-col gap-2">
+            <h4 class="font-bold text-blue-800 mb-2 flex items-center gap-2"><i class="fas fa-file-contract"></i> SOAT</h4>
+            <label class="text-blue-700 font-semibold">Fecha de Expedición</label>
+            <input type="date" name="soat_expedicion" class="form-input w-full border border-blue-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white" value="{{ old('soat_expedicion') }}" required>
+            <label class="text-blue-700 font-semibold mt-2">Fecha de Vencimiento</label>
+            <input type="date" name="soat_vencimiento" class="form-input w-full border border-blue-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white" value="{{ old('soat_vencimiento') }}" required>
+          </div>
+          <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-5 shadow flex flex-col gap-2">
+            <h4 class="font-bold text-green-800 mb-2 flex items-center gap-2"><i class="fas fa-tools"></i> Técnico Mecánica</h4>
+            <label class="text-green-700 font-semibold">Fecha de Expedición</label>
+            <input type="date" name="tecnico_expedicion" class="form-input w-full border border-green-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-white" value="{{ old('tecnico_expedicion') }}" required>
+            <label class="text-green-700 font-semibold mt-2">Fecha de Vencimiento</label>
+            <input type="date" name="tecnico_vencimiento" class="form-input w-full border border-green-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-white" value="{{ old('tecnico_vencimiento') }}" required>
+          </div>
+        </div>
 
         <div class="flex items-center mb-8">
           <div class="p-2 bg-indigo-100 rounded-lg mr-3">

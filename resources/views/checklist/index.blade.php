@@ -11,20 +11,24 @@
         body { font-family: 'Inter', sans-serif; }
         .glass-effect { backdrop-filter: blur(10px); background: rgba(255,255,255,0.95);}
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);}
-        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);}
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 2px 8px 0 rgba(102,126,234,0.08);}
+        .card-hover:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 16px 32px -8px rgba(102,126,234,0.15);}
         .table-row-hover { transition: all 0.2s ease-in-out;}
-        .table-row-hover:hover { background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%); transform: translateX(4px);}
+        .table-row-hover:hover { background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%); transform: translateX(6px) scale(1.01); box-shadow: 0 2px 8px 0 rgba(102,126,234,0.08);}
         .nav-link { position: relative; overflow: hidden;}
         .nav-link::before { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.3s ease;}
         .nav-link:hover::before { width: 100%;}
         .stat-counter { animation: countUp 1.5s ease-out;}
         @keyframes countUp { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);}}
-        .btn-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease;}
-        .btn-gradient:hover { background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);}
+        .btn-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease; box-shadow: 0 2px 8px 0 rgba(102,126,234,0.10);}
+        .btn-gradient:hover { background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%); transform: translateY(-2px) scale(1.03); box-shadow: 0 10px 25px rgba(102,126,234,0.18);}
         .status-badge { position: relative; overflow: hidden;}
         .status-badge::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s;}
         .status-badge:hover::before { left: 100%;}
+        .table thead th { background: linear-gradient(90deg, #eef2ff 0%, #f3e8ff 100%); }
+        .table tbody tr { border-bottom: 1px solid #f3f4f6; }
+        .table tbody tr:last-child { border-bottom: none; }
+        .table { border-radius: 1rem; overflow: hidden; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">

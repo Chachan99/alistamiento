@@ -42,13 +42,43 @@ class VehiculoController extends Controller
 
     public function update(Request $request, Vehiculo $vehiculo)
     {
+        \Log::info('Datos recibidos en update:', $request->all());
+        \Log::info('Archivos recibidos:', [
+            'soat_pdf' => $request->file('soat_pdf'),
+            'tecnico_mecanica_pdf' => $request->file('tecnico_mecanica_pdf'),
+            'licencia_transito_pdf' => $request->file('licencia_transito_pdf'),
+        ]);
         $request->validate([
             'placa' => 'required|unique:vehiculos,placa,' . $vehiculo->id,
             'tipo' => 'required',
             'user_id' => 'nullable|exists:users,id',
+            'soat_pdf' => 'nullable|file|mimes:pdf',
+            'tecnico_mecanica_pdf' => 'nullable|file|mimes:pdf',
+            'licencia_transito_pdf' => 'nullable|file|mimes:pdf',
+            'soat_expedicion' => 'nullable|date',
+            'soat_vencimiento' => 'nullable|date',
+            'tecnico_mecanica_expedicion' => 'nullable|date',
+            'tecnico_mecanica_vencimiento' => 'nullable|date',
+            'linea' => 'nullable|string',
         ]);
 
-        $vehiculo->update($request->all());
+        $data = $request->all();
+
+        // Procesar archivos PDF
+        foreach(['soat_pdf', 'tecnico_mecanica_pdf', 'licencia_transito_pdf'] as $pdfField) {
+            if ($request->hasFile($pdfField)) {
+                $file = $request->file($pdfField);
+                $path = $file->store('vehiculos', 'public');
+                $data[$pdfField] = $path;
+                \Log::info('Archivo guardado para ' . $pdfField . ': ' . $path);
+            } else {
+                unset($data[$pdfField]); // No sobreescribir si no se sube
+                \Log::info('No se subió archivo para ' . $pdfField);
+            }
+        }
+
+        $vehiculo->update($data);
+        \Log::info('Datos finales guardados en vehiculo:', $vehiculo->toArray());
 
         return redirect()->route('vehiculos.index')->with('success', 'Vehículo actualizado con éxito.');
     }

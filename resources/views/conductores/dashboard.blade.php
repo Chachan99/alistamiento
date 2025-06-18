@@ -113,6 +113,99 @@
         </a>
       </div>
 
+      <!-- Bloque de datos del conductor y vehículo asignado -->
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Datos del Conductor -->
+        <div class="bg-white rounded-lg shadow p-6 border-t-4 border-indigo-500">
+          <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-user-circle text-indigo-500"></i> Datos del Conductor
+          </h2>
+          <ul class="text-gray-700 space-y-2">
+            <li><span class="font-semibold">Nombre:</span> {{ auth()->user()->name }}</li>
+            <li><span class="font-semibold">Correo:</span> {{ auth()->user()->email }}</li>
+            <li><span class="font-semibold">Número de Cédula:</span> {{ auth()->user()->numero_cedula ?? 'No registrado' }}</li>
+            <li>
+              <span class="font-semibold">PDF Cédula:</span>
+              @if(auth()->user()->pdf_cedula)
+                <a href="{{ asset('storage/' . auth()->user()->pdf_cedula) }}" target="_blank" class="text-blue-600 underline">Ver PDF</a>
+              @else
+                <span class="text-gray-400">No cargado</span>
+              @endif
+            </li>
+            <li>
+              <span class="font-semibold">PDF Licencia:</span>
+              @if(auth()->user()->pdf_licencia)
+                <a href="{{ asset('storage/' . auth()->user()->pdf_licencia) }}" target="_blank" class="text-blue-600 underline">Ver PDF</a>
+              @else
+                <span class="text-gray-400">No cargado</span>
+              @endif
+            </li>
+            <li><span class="font-semibold">Fecha Expedición Licencia:</span> {{ auth()->user()->fecha_expedicion_licencia ?? 'No registrada' }}</li>
+            <li><span class="font-semibold">Fecha Vencimiento Licencia:</span> {{ auth()->user()->fecha_vencimiento_licencia ?? 'No registrada' }}</li>
+          </ul>
+        </div>
+
+        <!-- Datos del Vehículo Asignado -->
+        <div class="bg-white rounded-lg shadow p-6 border-t-4 border-green-500">
+          <h2 class="text-xl font-bold text-green-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-car text-green-500"></i> Vehículo Asignado
+          </h2>
+          @if($vehiculo)
+            <ul class="text-gray-700 space-y-2">
+              <li><span class="font-semibold">Marca:</span> {{ $vehiculo->marca }}</li>
+              <li><span class="font-semibold">Línea:</span> {{ $vehiculo->linea }}</li>
+              <li><span class="font-semibold">Modelo:</span> {{ $vehiculo->modelo }}</li>
+              <li><span class="font-semibold">Placa:</span> {{ $vehiculo->placa }}</li>
+              <li>
+                <span class="font-semibold">SOAT:</span>
+                @if($vehiculo->soat_pdf)
+                  <a href="{{ asset('storage/' . $vehiculo->soat_pdf) }}" target="_blank" class="text-blue-600 underline">Ver PDF</a>
+                @else
+                  <span class="text-gray-400">No cargado</span>
+                @endif
+                @if($vehiculo->soat_vencimiento)
+                  @php
+                    $diasSoat = \Carbon\Carbon::parse($vehiculo->soat_vencimiento)->diffInDays(now(), false);
+                  @endphp
+                  <span class="ml-2 px-2 py-1 rounded text-xs font-semibold {{ $diasSoat <= 15 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
+                    Vence: {{ \Carbon\Carbon::parse($vehiculo->soat_vencimiento)->format('d/m/Y') }}
+                    ({{ $diasSoat < 0 ? 'Vencido' : $diasSoat . ' días' }})
+                  </span>
+                @endif
+              </li>
+              <li>
+                <span class="font-semibold">Técnico Mecánica:</span>
+                @if($vehiculo->tecnico_mecanica_pdf)
+                  <a href="{{ asset('storage/' . $vehiculo->tecnico_mecanica_pdf) }}" target="_blank" class="text-blue-600 underline">Ver PDF</a>
+                @else
+                  <span class="text-gray-400">No cargada</span>
+                @endif
+                @if($vehiculo->tecnico_mecanica_vencimiento)
+                  @php
+                    $diasTecno = \Carbon\Carbon::parse($vehiculo->tecnico_mecanica_vencimiento)->diffInDays(now(), false);
+                  @endphp
+                  <span class="ml-2 px-2 py-1 rounded text-xs font-semibold {{ $diasTecno <= 15 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
+                    Vence: {{ \Carbon\Carbon::parse($vehiculo->tecnico_mecanica_vencimiento)->format('d/m/Y') }}
+                    ({{ $diasTecno < 0 ? 'Vencido' : $diasTecno . ' días' }})
+                  </span>
+                @endif
+              </li>
+              <li>
+                <span class="font-semibold">Licencia de Tránsito:</span>
+                @if($vehiculo->licencia_transito_pdf)
+                  <a href="{{ asset('storage/' . $vehiculo->licencia_transito_pdf) }}" target="_blank" class="text-blue-600 underline">Ver PDF</a>
+                @else
+                  <span class="text-gray-400">No cargada</span>
+                @endif
+              </li>
+            </ul>
+          @else
+            <p class="text-gray-500">No tienes un vehículo asignado actualmente.</p>
+          @endif
+        </div>
+      </div>
+      <!-- Fin bloque datos conductor y vehículo -->
+
     </div>
   </main>
 

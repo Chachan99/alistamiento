@@ -108,6 +108,50 @@
     </div>
     @endif
 
+    {{-- ALERTA DE VENCIMIENTO DE SOAT Y TÉCNICO MECÁNICA --}}
+    @php
+      use Carbon\Carbon;
+      $hoy = Carbon::now();
+      $diasSoat = null;
+      $diasTecnico = null;
+      $fechaVencSoat = old('soat_vencimiento') ? Carbon::parse(old('soat_vencimiento')) : null;
+      $fechaVencTecnico = old('tecnico_vencimiento') ? Carbon::parse(old('tecnico_vencimiento')) : null;
+      if($fechaVencSoat) $diasSoat = $hoy->diffInDays($fechaVencSoat, false);
+      if($fechaVencTecnico) $diasTecnico = $hoy->diffInDays($fechaVencTecnico, false);
+    @endphp
+
+    @if($diasSoat !== null && $diasSoat <= 15 && $diasSoat >= 0)
+      <div class="max-w-md mx-auto mb-4 mt-8">
+        <div class="flex items-center bg-red-100 border-l-4 border-red-500 p-4 rounded-lg shadow">
+          <i class="fa-solid fa-file-shield text-red-600 text-2xl mr-4"></i>
+          <div>
+            <div class="text-lg font-semibold text-red-800">
+              ¡El SOAT vence en <span class="font-bold">{{ intval(ceil($diasSoat)) }} día{{ intval(ceil($diasSoat)) == 1 ? '' : 's' }}</span>!
+            </div>
+            <div class="text-sm text-red-700">
+              Fecha de vencimiento: {{ $fechaVencSoat->format('d/m/Y') }}
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
+
+    @if($diasTecnico !== null && $diasTecnico <= 15 && $diasTecnico >= 0)
+      <div class="max-w-md mx-auto mb-4 mt-8">
+        <div class="flex items-center bg-red-100 border-l-4 border-red-500 p-4 rounded-lg shadow">
+          <i class="fa-solid fa-file-contract text-red-600 text-2xl mr-4"></i>
+          <div>
+            <div class="text-lg font-semibold text-red-800">
+              ¡La técnico mecánica vence en <span class="font-bold">{{ intval(ceil($diasTecnico)) }} día{{ intval(ceil($diasTecnico)) == 1 ? '' : 's' }}</span>!
+            </div>
+            <div class="text-sm text-red-700">
+              Fecha de vencimiento: {{ $fechaVencTecnico->format('d/m/Y') }}
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
+
     <form action="{{ route('vehiculos.store') }}" method="POST" class="grid grid-cols-1 lg:grid-cols-3 gap-8" novalidate>
       @csrf
 
@@ -219,6 +263,89 @@
               <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
             </p>
           @enderror
+        </div>
+
+        <div class="form-group">
+          <label for="soat_pdf" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+            <i class="fas fa-file-shield mr-2 text-gray-400"></i>SOAT (PDF)
+          </label>
+          <input type="file" id="soat_pdf" name="soat_pdf" accept="application/pdf" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          @error('soat_pdf')
+            <p class="text-red-600 mt-2 text-sm flex items-center">
+              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+            </p>
+          @enderror
+        </div>
+        <div class="form-group">
+          <label for="tecnico_pdf" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+            <i class="fas fa-file-contract mr-2 text-gray-400"></i>Técnico Mecánica (PDF)
+          </label>
+          <input type="file" id="tecnico_pdf" name="tecnico_pdf" accept="application/pdf" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          @error('tecnico_pdf')
+            <p class="text-red-600 mt-2 text-sm flex items-center">
+              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+            </p>
+          @enderror
+        </div>
+        <div class="form-group">
+          <label for="licencia_transito_pdf" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+            <i class="fas fa-id-card mr-2 text-gray-400"></i>Licencia de Tránsito (PDF)
+          </label>
+          <input type="file" id="licencia_transito_pdf" name="licencia_transito_pdf" accept="application/pdf" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          @error('licencia_transito_pdf')
+            <p class="text-red-600 mt-2 text-sm flex items-center">
+              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+            </p>
+          @enderror
+        </div>
+
+        <div class="form-group grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="soat_expedicion" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+              <i class="fas fa-calendar-plus mr-2 text-gray-400"></i>Expedición SOAT
+            </label>
+            <input type="date" id="soat_expedicion" name="soat_expedicion" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('soat_expedicion') }}" />
+            @error('soat_expedicion')
+              <p class="text-red-600 mt-2 text-sm flex items-center">
+                <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+              </p>
+            @enderror
+          </div>
+          <div>
+            <label for="soat_vencimiento" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+              <i class="fas fa-calendar-times mr-2 text-gray-400"></i>Vencimiento SOAT
+            </label>
+            <input type="date" id="soat_vencimiento" name="soat_vencimiento" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('soat_vencimiento') }}" />
+            @error('soat_vencimiento')
+              <p class="text-red-600 mt-2 text-sm flex items-center">
+                <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+              </p>
+            @enderror
+          </div>
+        </div>
+        <div class="form-group grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="tecnico_expedicion" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+              <i class="fas fa-calendar-plus mr-2 text-gray-400"></i>Expedición Técnico Mecánica
+            </label>
+            <input type="date" id="tecnico_expedicion" name="tecnico_expedicion" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('tecnico_expedicion') }}" />
+            @error('tecnico_expedicion')
+              <p class="text-red-600 mt-2 text-sm flex items-center">
+                <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+              </p>
+            @enderror
+          </div>
+          <div>
+            <label for="tecnico_vencimiento" class="form-label block text-sm font-semibold text-gray-700 mb-2 transition-colors">
+              <i class="fas fa-calendar-times mr-2 text-gray-400"></i>Vencimiento Técnico Mecánica
+            </label>
+            <input type="date" id="tecnico_vencimiento" name="tecnico_vencimiento" class="form-input w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('tecnico_vencimiento') }}" />
+            @error('tecnico_vencimiento')
+              <p class="text-red-600 mt-2 text-sm flex items-center">
+                <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+              </p>
+            @enderror
+          </div>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
